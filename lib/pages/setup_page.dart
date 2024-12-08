@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:universal_html/html.dart' as html;
 
 import '../config.dart';
 
@@ -13,7 +14,7 @@ class LoginPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final hostInput = useTextEditingController(
-      text: api.apiKey.isEmpty ? 'http://localhost:9862' : api.apiKey,
+      text: api.apiKey.isEmpty ? html.window.location.toString() : api.apiKey,
     );
     final userName = useTextEditingController(text: kDebugMode ? 'admin' : '');
     final pass = useTextEditingController(text: kDebugMode ? 'admin' : '');
@@ -27,10 +28,15 @@ class LoginPage extends HookConsumerWidget {
             children: [
               Text('Setup page', style: TextStyle(fontSize: 30)),
               SizedBox(height: 50),
-              TextField(
-                decoration: InputDecoration(
-                    hintText: 'API url', border: OutlineInputBorder()),
-                controller: hostInput,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: TextField(
+                  controller: hostInput,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Host Input",
+                  ),
+                ),
               ),
               AutofillGroup(
                 child: Column(
@@ -38,16 +44,20 @@ class LoginPage extends HookConsumerWidget {
                     SizedBox(height: 20),
                     TextField(
                       autofillHints: [AutofillHints.username],
-                      decoration: InputDecoration(
-                          hintText: 'Username', border: OutlineInputBorder()),
                       controller: userName,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "Username",
+                      ),
                     ),
                     SizedBox(height: 20),
                     TextField(
                       autofillHints: [AutofillHints.password],
-                      decoration: InputDecoration(
-                          hintText: 'Password', border: OutlineInputBorder()),
                       controller: pass,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "Password",
+                      ),
                     ),
                   ],
                 ),
@@ -55,7 +65,8 @@ class LoginPage extends HookConsumerWidget {
               ElevatedButton(
                 onPressed: () async {
                   try {
-                    final res = await http.head(Uri.parse('${hostInput.text}/'));
+                    final res =
+                        await http.head(Uri.parse('${hostInput.text}/'));
                     if (res.statusCode != 200) {
                       throw Exception('Invalid api url check and try again');
                     }
@@ -64,8 +75,11 @@ class LoginPage extends HookConsumerWidget {
                     api.basePath = hostInput.text;
 
                     if (!context.mounted) return;
-                    await api.login(context,
-                        user: userName.text, pass: pass.text);
+                    await api.login(
+                      context,
+                      user: userName.text,
+                      pass: pass.text,
+                    );
                   } catch (e) {
                     print(e);
                     if (!context.mounted) return;
