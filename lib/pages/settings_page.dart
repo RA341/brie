@@ -1,5 +1,6 @@
 import 'package:brie/main.dart';
 import 'package:brie/models.dart';
+import 'package:brie/pages/category_page.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -12,17 +13,39 @@ class SettingsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentSettings = ref.watch(settingsProvider);
 
-    return currentSettings.when(
-      data: (data) => SettingsView(settings: data),
-      error: (error, stackTrace) => Center(
-        child: Column(
-          children: [
-            Text('Error', style: TextStyle(fontSize: 30)),
-            Text(error.toString())
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Gouda'),
+        actions: [
+          ElevatedButton(
+            onPressed: () async => await Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => SettingsPage()),
+            ),
+            child: Text('Settings'),
+          ),
+          SizedBox(width: 20),
+          ElevatedButton(
+            onPressed: () async => await Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => CategoryPage()),
+            ),
+            child: Text('Categories'),
+          )
+        ],
       ),
-      loading: () => Center(child: CircularProgressIndicator()),
+      body: currentSettings.when(
+        data: (data) => SettingsView(settings: data),
+        error: (error, stackTrace) => Center(
+          child: Column(
+            children: [
+              Text('Error', style: TextStyle(fontSize: 30)),
+              Text(error.toString())
+            ],
+          ),
+        ),
+        loading: () => Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }

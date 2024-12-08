@@ -1,13 +1,10 @@
 import 'package:brie/api.dart';
 import 'package:brie/pages/category_page.dart';
-import 'package:brie/pages/home_page.dart';
 import 'package:brie/pages/settings_page.dart';
 import 'package:brie/pages/setup_page.dart';
-import 'package:brie/providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_html/html.dart' as html;
 
 import 'config.dart';
@@ -35,25 +32,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Gouda',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.green, brightness: Brightness.dark),
-        useMaterial3: true,
-      ),
-      home: const RootPage(),
-    );
-  }
-}
-
-class RootPage extends ConsumerWidget {
-  const RootPage({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: CategoryPage(),
-      // body: api.apiKey.isEmpty ? LoginPage() : HomePage(),
-    );
+        title: 'Gouda',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.green, brightness: Brightness.dark),
+          useMaterial3: true,
+        ),
+        home: api.apiKey.isEmpty ? LoginPage() : CategoryPage());
   }
 }

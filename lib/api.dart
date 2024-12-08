@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:brie/config.dart';
+import 'package:brie/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -77,7 +78,7 @@ class GoudaApi {
       await Navigator.pushReplacement(
         ctx,
         MaterialPageRoute(
-          builder: (context) => RootPage(),
+          builder: (context) => SettingsPage(),
         ),
       );
     } catch (e) {

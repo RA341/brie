@@ -1,4 +1,5 @@
 import 'package:brie/main.dart';
+import 'package:brie/pages/settings_page.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -12,51 +13,74 @@ class CategoryPage extends HookConsumerWidget {
     final cats = ref.watch(categoryListProvider);
     final addCategories = useTextEditingController(text: '');
 
-    return cats.when(
-      data: (data) => Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 200),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: TextField(
-                    controller: addCategories,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Add new category',
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await api.categoryApi
-                          .addCategory(addCategories.text.trim());
-                      ref.invalidate(categoryListProvider);
-                    },
-                    child: Text('Add'),
-                  ),
-                )
-              ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Gouda'),
+        actions: [
+          ElevatedButton(
+            onPressed: () async => await Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => SettingsPage()),
             ),
+            child: Text('Settings'),
           ),
-          SizedBox(height: 20),
-          CategoriesView(data),
+          SizedBox(width: 20),
+          ElevatedButton(
+            onPressed: () async => await Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => CategoryPage()),
+            ),
+            child: Text('Categories'),
+          )
         ],
       ),
-      error: (error, stackTrace) => Center(
-        child: Column(
+      body: cats.when(
+        data: (data) => Column(
           children: [
-            Text('Error', style: TextStyle(fontSize: 30)),
-            Text(error.toString())
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 20, horizontal: 200),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: TextField(
+                      controller: addCategories,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Add new category',
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await api.categoryApi
+                            .addCategory(addCategories.text.trim());
+                        ref.invalidate(categoryListProvider);
+                      },
+                      child: Text('Add'),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            CategoriesView(data),
           ],
         ),
+        error: (error, stackTrace) => Center(
+          child: Column(
+            children: [
+              Text('Error', style: TextStyle(fontSize: 30)),
+              Text(error.toString())
+            ],
+          ),
+        ),
+        loading: () => Center(child: CircularProgressIndicator()),
       ),
-      loading: () => Center(child: CircularProgressIndicator()),
     );
   }
 }
