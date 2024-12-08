@@ -66,6 +66,12 @@ class LoginPage extends HookConsumerWidget {
               ElevatedButton(
                 onPressed: () async {
                   try {
+                    hostInput.text = hostInput.text.endsWith('/')
+                        ? hostInput.text.substring(0, hostInput.text.length - 1)
+                        : hostInput.text;
+
+                    print(hostInput.text);
+
                     await prefs.setString('basepath', hostInput.text);
                     api = GoudaApi(basePath: hostInput.text, apiKey: "");
 
