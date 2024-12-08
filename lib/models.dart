@@ -83,7 +83,7 @@ class Settings {
   // General
   final String apiKey;
   final String serverPort;
-  final String downloadCheckTimeout;
+  final int downloadCheckTimeout;
 
   // Folders
   final String completeFolder;
@@ -93,8 +93,8 @@ class Settings {
   // User details
   final String username;
   final String password;
-  final String userID;
-  final String groupID;
+  final int userID;
+  final int groupID;
 
   // Torrent settings
   final String torrentHost;
@@ -125,14 +125,14 @@ class Settings {
     return Settings(
       apiKey: json['api_key'] as String,
       serverPort: json['server_port'] as String,
-      downloadCheckTimeout: json['download_check_timeout'] as String,
+      downloadCheckTimeout: json['download_check_timeout'] as int,
       completeFolder: json['complete_folder'] as String,
       downloadFolder: json['download_folder'] as String,
       torrentsFolder: json['torrents_folder'] as String,
       username: json['username'] as String,
       password: json['password'] as String,
-      userID: json['user_uid'] as String,
-      groupID: json['group_uid'] as String,
+      userID: json['user_uid'] as int,
+      groupID: json['group_uid'] as int,
       torrentHost: json['torrent_host'] as String,
       torrentName: json['torrent_name'] as String,
       torrentPassword: json['torrent_password'] as String,

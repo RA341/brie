@@ -1,5 +1,7 @@
 import 'package:brie/api.dart';
+import 'package:brie/pages/category_page.dart';
 import 'package:brie/pages/home_page.dart';
+import 'package:brie/pages/settings_page.dart';
 import 'package:brie/pages/setup_page.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/foundation.dart';
@@ -49,9 +51,9 @@ class RootPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Scaffold(
-      body: api.apiKey.isEmpty ? LoginPage() : HomePage(),
+      body: CategoryPage(),
+      // body: api.apiKey.isEmpty ? LoginPage() : HomePage(),
     );
   }
 }

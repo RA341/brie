@@ -20,8 +20,13 @@ class GoudaApi {
     this.apiKey = '',
   }) {
     categoryApi = CategoryApi(
-      defaultHeader: defaultHeaders(),
       baseUrl: basePath,
+      defaultHeader: defaultHeaders(),
+    );
+
+    settingsApi = SettingsApi(
+      baseUrl: basePath,
+      defaultHeader: defaultHeaders(),
     );
   }
 
@@ -141,7 +146,7 @@ class CategoryApi {
 
   Future<void> addCategory(String cat) async {
     final resp = await http.post(
-      Uri.parse('$baseUrl/category/list'),
+      Uri.parse('$baseUrl/category/add'),
       body: jsonEncode({"category": cat}),
       headers: defaultHeader,
     );
@@ -152,7 +157,7 @@ class CategoryApi {
   }
 
   Future<void> deleteCategory(String cat) async {
-    final resp = await http.post(
+    final resp = await http.delete(
       Uri.parse('$baseUrl/category/del'),
       body: jsonEncode({"category": cat}),
       headers: defaultHeader,
@@ -163,18 +168,19 @@ class CategoryApi {
     }
   }
 
-  Future<Map<String, dynamic>> listCategory(String cat) async {
-    final resp = await http.post(
+  Future<List<String>> listCategory() async {
+    final resp = await http.get(
       Uri.parse('$baseUrl/category/list'),
-      body: jsonEncode({"category": cat}),
       headers: defaultHeader,
     );
 
     if (resp.statusCode != 200) {
-      throw Exception("Failed to add category $cat, ${resp.body}");
+      throw Exception("Failed to list category, ${resp.body}");
     }
 
-    return jsonDecode(resp.body) as Map<String, dynamic>;
+    final tmp = (jsonDecode(resp.body) as Map<String, dynamic>)['categories']
+        as List<dynamic>;
+    return tmp.map((e) => e.toString()).toList();
   }
 }
 
@@ -206,8 +212,7 @@ class SettingsApi {
       throw Exception('Failed to get config: ${response.statusCode}');
     }
 
-    return Settings.fromJson(
-      jsonDecode(response.body) as Map<String, dynamic>,
-    );
+    final tmp = jsonDecode(response.body) as Map<String, dynamic>;
+    return Settings.fromJson(tmp);
   }
 }
