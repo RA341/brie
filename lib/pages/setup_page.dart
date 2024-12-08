@@ -35,7 +35,7 @@ class LoginPage extends HookConsumerWidget {
                   controller: hostInput,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: "Host Input",
+                    labelText: "Gouda Url",
                   ),
                 ),
               ),
@@ -66,12 +66,6 @@ class LoginPage extends HookConsumerWidget {
               ElevatedButton(
                 onPressed: () async {
                   try {
-                    final res =
-                        await http.head(Uri.parse('${hostInput.text}/'));
-                    if (res.statusCode != 200) {
-                      throw Exception('Invalid api url check and try again');
-                    }
-
                     await prefs.setString('basepath', hostInput.text);
                     api = GoudaApi(basePath: hostInput.text, apiKey: "");
 
