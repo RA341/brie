@@ -1,3 +1,4 @@
+import 'package:brie/api.dart';
 import 'package:brie/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +73,7 @@ class LoginPage extends HookConsumerWidget {
                     }
 
                     await prefs.setString('basepath', hostInput.text);
-                    api.basePath = hostInput.text;
+                    api = GoudaApi(basePath: hostInput.text, apiKey: "");
 
                     if (!context.mounted) return;
                     await api.login(
