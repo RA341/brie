@@ -196,7 +196,7 @@ class SettingsView extends HookConsumerWidget {
           Text(label),
           SizedBox(width: 20),
           DropdownMenu<String>(
-            initialSelection: options.first,
+            initialSelection: controller.text,
             onSelected: (String? value) =>
                 controller.text = value ?? options.first,
             dropdownMenuEntries:
