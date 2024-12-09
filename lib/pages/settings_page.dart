@@ -109,7 +109,7 @@ class SettingsView extends HookConsumerWidget {
               "Torrent Client Type",
             ),
             createDropDown(
-              ["http://", "https://"],
+              ["http", "https"],
               torrentProtocol,
               "Torrent Client Protocol",
             ),
